@@ -6,6 +6,7 @@ local systemSettings = {
 }
 
 function Scene.create(scene, context)
+    scene.world:configure({ sky = { enabled = false }, fog = { enabled = false }, ambient = { 180, 180, 180 } })
     local Content = context:require('scripts.content')
     local state = Content.create(scene)
     state.scene = scene

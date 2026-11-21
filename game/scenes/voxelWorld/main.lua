@@ -6,6 +6,7 @@ local systemSettings = {
 }
 
 function Scene.create(scene, context)
+    scene.resources:define('blocks', { path = 'scene://textures/blocks.png', filter = 'nearest' })
     local Content = context:require('scripts.content')
     local state = Content.new(scene)
     state.scene = scene

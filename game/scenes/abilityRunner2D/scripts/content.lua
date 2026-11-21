@@ -12,7 +12,13 @@ function Content.create(scene)
     }
     local ui = scene.root:find('World3D/World2D')
     ui.layoutMode, ui.autoUpdatePhysics = 'Fit', false
-    state.physics = scene:createPhysics2D()
+    state.physics = scene:createPhysics2D({
+        unitsPerMeter = 64,
+        gravity = 700,
+        gravityDirection = { 0, -1 },
+        fixedDelta = 1 / 60,
+        interpolate = true,
+    })
     scene.root:find('World3D').currentCamera = nil
     scene.statsHelp = 'A/D or touch: move; Space: double jump; Shift: dash; C: slide; R: respawn.'
     scene.package:require('scripts.builders.level').create(state)

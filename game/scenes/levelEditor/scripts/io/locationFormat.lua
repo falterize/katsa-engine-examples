@@ -1,5 +1,5 @@
 -- The `.katsa` location data: version check, the node tree encoder/decoder and the package
--- file set (settings.lua, main.lua, assets/location.lua, copied assets). Engine access goes
+-- file set (conf.lua, main.lua, assets/location.lua, copied assets). Engine access goes
 -- through an adapter, so this module stays pure and testable.
 --
 -- Adapter for encode:  adapter.className(node), adapter.name(node), adapter.properties(node),
@@ -28,7 +28,6 @@ return Scene
 
 local SETTINGS = [[
 return {
-    layoutVersion = 3,
     presentation = { navigation = false },
 }
 ]]
@@ -114,7 +113,7 @@ end
 -- the scripts/loader.lua text the package carries so it can run on its own.
 function Format.pack(data, files, loaderSource)
     local zip = ZipWriter.new()
-    zip:add('settings.lua', SETTINGS)
+    zip:add('conf.lua', SETTINGS)
     zip:add('main.lua', LOADER)
     zip:addDirectory('assets')
     zip:add('assets/location.lua', LuaText.serialize(data))

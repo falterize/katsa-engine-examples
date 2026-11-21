@@ -6,6 +6,8 @@ local systemSettings = {
 }
 
 function Scene.create(scene, context)
+    scene.resources:define('bricks', { path = 'shared://textures/surfaces/bricks.jpg' })
+    scene.resources:define('stone', { path = 'shared://textures/surfaces/stone.png', filter = 'nearest' })
     local Content = context:require('scripts.content')
     local state = Content.new(scene)
     state.scene = scene

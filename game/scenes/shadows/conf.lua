@@ -1,0 +1,4 @@
+local Conf = {
+}
+
+return Conf

@@ -18,7 +18,7 @@ function Content.new(scene)
     environment.shadows.enabled = false
     environment.ambient = { 120, 128, 150 }
     environment.sky.enabled = true
-    local view = settings.world.viewDistance * Blocks.CHUNK
+    local view = settings.voxels.viewDistance * Blocks.CHUNK
     environment.fog.enabled = true
     environment.fog.offset = view * 0.55
     environment.fog.maxOpacity = 1
@@ -30,7 +30,7 @@ function Content.new(scene)
     })
 
     local self = setmetatable({ scene = scene, blocks = Blocks, settings = settings }, Content)
-    self.voxels = VoxelWorld.new(scene, scene.context or scene, Blocks, settings.world)
+    self.voxels = VoxelWorld.new(scene, scene.context or scene, Blocks, settings.voxels)
     self.walker = Walker.new(self.voxels, settings.player)
     self.hotbar = Hotbar.new(Blocks)
     local camera = scene.camera

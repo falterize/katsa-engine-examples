@@ -6,6 +6,7 @@ local systemSettings = {
 }
 
 function Scene.create(scene, context)
+    scene.resources:define('bricks', { path = 'shared://textures/surfaces/bricks.jpg' })
     local Content = context:require('scripts.content')
     local state = Content.new(scene)
     state.scene = scene
