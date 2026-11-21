@@ -26,3 +26,15 @@ too. See the engine's [Projects and scenes](https://github.com/falterize/katsa-e
   [@falterize](https://github.com/falterize) and is licensed under
   [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/) (CC BY).
 - `xbot.glb` is converted from Mixamo's X Bot and stays under Mixamo/Adobe's terms.
+
+## Asset notices
+
+| Asset | License / status |
+| --- | --- |
+| Generated `colliderMask.png` | CC0 1.0; procedurally generated for collider demonstrations |
+| Eight supplied v33 images | Original license unspecified; not relicensed as MIT |
+| Supplied Stare Shooter model, textures, images and adapted game/shader content | Original license unspecified; imported user content is not relicensed as MIT |
+| Generated WAV, OBJ and GLB assets | CC0 1.0; embedded supplied textures retain their original status |
+
+Scene code is MIT like the engine. The engine's own dependency notices live in its
+[licenses guide](https://github.com/falterize/katsa-engine/blob/v108.10/docs/guides/development/licenses.md).
