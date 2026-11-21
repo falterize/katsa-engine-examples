@@ -5,7 +5,7 @@ menu. It is a Katsa *project*: its `conf.lua` (a table, see the engine's `docs/b
 start scene (`game/scenes/menu`), the scene folder (`game/scenes`) and the window settings; `game/` holds the scenes, shared characters and the
 scene catalog; `assets/` holds their models, textures, audio and tilesets.
 
-Use the branch with the same name as your engine version (`v108.10` goes with engine `v108.10`).
+Use the branch with the same name as your engine version (`v109` goes with engine `v109`).
 
 ## Run
 
@@ -18,7 +18,7 @@ luajit tools/dev/katsa.lua ../katsa-engine-examples
 The menu lists every scene; search by name or tag. A single scene (its own `conf.lua` and `main.lua`) also runs on its own
 (`luajit tools/dev/katsa.lua ../katsa-engine-examples/game/scenes/lights`), but scenes that use plain
 `assets/...` paths need the whole project. The archive of this folder (a `.zip`) works as a project
-too. See the engine's [Projects and scenes](https://github.com/falterize/katsa-engine/blob/v108.10/docs/book/projects.md).
+too. See the engine's [Projects and scenes](https://github.com/falterize/katsa-engine/blob/v109/docs/book/projects.md).
 
 ## Credits
 
@@ -37,4 +37,4 @@ too. See the engine's [Projects and scenes](https://github.com/falterize/katsa-e
 | Generated WAV, OBJ and GLB assets | CC0 1.0; embedded supplied textures retain their original status |
 
 Scene code is MIT like the engine. The engine's own dependency notices live in its
-[licenses guide](https://github.com/falterize/katsa-engine/blob/v108.10/docs/guides/development/licenses.md).
+[licenses guide](https://github.com/falterize/katsa-engine/blob/v109/docs/guides/development/licenses.md).

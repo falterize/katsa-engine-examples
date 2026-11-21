@@ -4,7 +4,7 @@
 local Version = require('source.engine.core.version')
 
 return {
-    version = '1.0.8b', -- engine version this project was made for; a difference warns at startup
+    version = '1.0.9a', -- engine version this project was made for; a difference warns at startup
     title = 'Katsa Engine ' .. Version.release,
     identity = 'katsa-engine', -- save folder name: Katsa/<identity>; keep it stable and unique
     console = true,
