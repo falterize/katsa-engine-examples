@@ -1,0 +1,28 @@
+name: tests
+# Runs the engine's regression suites against this project (engine branch = this branch, else main).
+on:
+  workflow_dispatch:
+  push:
+    branches: ['v108*']
+  pull_request:
+jobs:
+  suites:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: examples
+      - name: Check out the engine (same branch, else main)
+        run: |
+          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          repo=https://github.com/falterize/katsa-engine.git
+          git clone --depth 1 --branch "$branch" "$repo" engine || git clone --depth 1 "$repo" engine
+      - uses: ./engine/.github/actions/setup-engine
+        with:
+          engine: engine
+      - name: Regression suites
+        working-directory: engine
+        env:
+          KATSA_LIB_DIR: ${{ github.workspace }}/engine/native/build/linux
+          KATSA_PROJECT: ${{ github.workspace }}/examples
+        run: tools/ci/runSuites.sh
