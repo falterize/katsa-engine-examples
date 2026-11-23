@@ -5,9 +5,17 @@ local Base = require('source.engine.input.input')
 local Input = setmetatable({}, { __index = Base })
 Input.__index = Input
 
+local function isTouchDevice()
+    local os = katsa.system.getOS()
+    return os == 'Android' or os == 'iOS'
+end
+
 function Input.new(scene, player, orbit)
     local self = setmetatable(Base.new(scene, scene.controls), Input)
     self.player, self.orbit, self.captureWanted = player, orbit, true
+    self.touchDevice = isTouchDevice()
+    -- Touch: held Jump, toggled Run and Crouch (the on-screen buttons built by `draw`).
+    self.touchHeld = { jump = false, sprint = false, crouch = false }
     self.menuKey = scene.settings.presentation.menuKey or 'tab'
     self.actions:bind('Move', { left = 'a', right = 'd', forward = 'w', back = 's' })
     self.actions:on('Move', function(_, movement, dt)
@@ -51,9 +59,10 @@ function Input:update(dt)
     end
     Base.update(self, dt)
     local input, keys = self.player.input, self.actions.keys
-    input.jump = playing and keys.space == true
-    input.sprint = playing and keys.lshift == true
-    input.crouch = playing and (keys.lctrl == true or keys.c == true)
+    local held = self.touchHeld
+    input.jump = playing and (keys.space == true or held.jump)
+    input.sprint = playing and (keys.lshift == true or held.sprint)
+    input.crouch = playing and (keys.lctrl == true or keys.c == true or held.crouch)
     input.shiftlock = playing and keys.q == true
     if not playing then
         self.player:setMove(0, 0)
@@ -110,6 +119,54 @@ function Input:wheelmoved(_, y)
     return true
 end
 
-function Input:draw() end -- The original desktop game has no joystick overlay.
+local function touchButton(ui, text, position, size, color)
+    local node = ui:button({
+        position = position,
+        size = size,
+        anchorPoint = { 1, 0 },
+        text = text,
+        fontSize = 18,
+        backgroundColor = color,
+    }, ui.content)
+    ui:create('UICorner', { radius = { 0, 10 } }, node)
+    return node
+end
+
+-- A phone has no keyboard: Jump (held), Run and Crouch (toggles) sit at the bottom right.
+function Input:buildTouchButtons()
+    local ui = self.scene.root:find('World3D/World2D')
+    local off, on = { 0.12, 0.3, 0.45 }, { 0.2, 0.55, 0.3 }
+    local held = self.touchHeld
+    local function hold(node, key)
+        node:connect('press', function() held[key] = true end)
+        node:connect('release', function() held[key] = false end)
+        node:connect('cancel', function() held[key] = false end)
+    end
+    local function toggle(node, key, label)
+        node:connect('press', function()
+            held[key] = not held[key]
+            node.text = label .. (held[key] and ': ON' or ': OFF')
+            node.backgroundColor = held[key] and on or off
+        end)
+    end
+    local jump = touchButton(ui, 'Jump', { 1, -16, 1, -150 }, { 0, 120, 0, 64 }, off)
+    hold(jump, 'jump')
+    local run = touchButton(ui, 'Run: OFF', { 1, -16, 1, -222 }, { 0, 120, 0, 56 }, off)
+    toggle(run, 'sprint', 'Run')
+    local crouch = touchButton(ui, 'Crouch: OFF', { 1, -176, 1, -150 }, { 0, 150, 0, 64 }, off)
+    toggle(crouch, 'crouch', 'Crouch')
+    self.touchButtons = { jump, run, crouch }
+end
+
+-- The desktop game has no overlay; on phones the engine joystick and the touch buttons appear.
+function Input:draw()
+    if not self.touchDevice then
+        return
+    end
+    Base.draw(self)
+    if not self.touchButtons then
+        self:buildTouchButtons()
+    end
+end
 
 return Input
