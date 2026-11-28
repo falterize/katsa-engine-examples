@@ -106,7 +106,7 @@ function Interface.create(self)
     )
     self.tvVideo = addVideo(screen, { name = 'TvVideo', size = { 1, 0, 1, 0 }, volume = 0.6 })
     local floating = self.videoBillboard.ui:container(
-        { size = { 1, 0, 1, 0 }, backgroundColor = { 0.04, 0.11, 0.16 } },
+        { size = { 1, 0, 1, 0 }, backgroundColor = { 0.04, 0.11, 0.16 }, clip = true },
         self.videoBillboard
     )
     self.videoBillboard.ui:create('UICorner', { radius = { 0, 18 } }, floating)
