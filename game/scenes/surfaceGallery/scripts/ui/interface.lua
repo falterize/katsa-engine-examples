@@ -90,13 +90,39 @@ function Interface.create(self)
             self.attachmentTitle.text = 'Attachment3D / ' .. self.offsetMode .. ' offset'
         end)
     end
+    -- VideoFrame on a SurfaceUI (the TV), a BillboardUI (floating) and the screen (corner). One
+    -- clip, one sound: the TV plays it with sound, the others are muted.
+    local clip = 'scene://video/demo.mp4'
+    self.videos = {}
+    local function addVideo(parent, settings)
+        settings.source, settings.looped, settings.playing = clip, true, true
+        local video = parent.ui:video(settings, parent)
+        self.videos[#self.videos + 1] = video
+        return video
+    end
+    local screen = self.videoScreen.ui:container(
+        { size = { 1, 0, 1, 0 }, backgroundColor = { 0, 0, 0 } },
+        self.videoScreen
+    )
+    self.tvVideo = addVideo(screen, { name = 'TvVideo', size = { 1, 0, 1, 0 }, volume = 0.6 })
+    local floating = self.videoBillboard.ui:container(
+        { size = { 1, 0, 1, 0 }, backgroundColor = { 0.04, 0.11, 0.16 } },
+        self.videoBillboard
+    )
+    self.videoBillboard.ui:create('UICorner', { radius = { 0, 18 } }, floating)
+    addVideo(floating, {
+        name = 'BillboardVideo',
+        position = { 0, 8, 0, 8 },
+        size = { 1, -16, 1, -16 },
+        volume = 0,
+    })
     local ui = self.scene.root:find('World3D/World2D')
     local controls = ui:container({
         _viewportAuthored = true,
         name = 'SurfaceControls',
         visible = false,
         position = { 0, 12, 0, 112 },
-        size = { 0, 260, 0, 150 },
+        size = { 0, 260, 0, 246 },
     }, ui.content)
     require('source.engine.ui.widgets.collapsible').create(self.scene, controls, 'Surface controls')
     do
@@ -126,6 +152,57 @@ function Interface.create(self)
             self.extentFixed = not self.extentFixed
             board.extentsOffset = self.extentFixed and { 0, 0, 0 } or { 0, 1, 0 }
             board.extentsOffsetWorldSpace = self.extentFixed and { 0, 1, 0 } or { 0, 0, 0 }
+        end)
+    end
+    -- A third VideoFrame on the screen itself, in the corner.
+    do
+        local corner = ui:video({
+            name = 'ScreenVideo',
+            _viewportAuthored = true,
+            position = { 1, -12, 1, -90 },
+            anchorPoint = { 1, 1 },
+            size = { 0, 192, 0, 108 },
+            source = clip,
+            looped = true,
+            playing = true,
+            volume = 0,
+            fitMode = 'Fit',
+            backgroundColor = { 0, 0, 0 },
+        }, ui.content)
+        ui:create('UICorner', { radius = { 0, 12 } }, corner)
+        corner.clip = true
+        self.videos[#self.videos + 1] = corner
+    end
+    do
+        local node = ui:button({
+            position = { 0, 4, 0, 148 },
+            size = { 1, -8, 0, 42 },
+            text = 'Video: play / pause',
+            textScaled = true,
+            maxTextSize = 16,
+            backgroundColor = { 0.1, 0.25, 0.35 },
+        }, controls)
+        node:connect('press', function()
+            local playing = not self.videos[1].playing
+            for _, video in ipairs(self.videos) do
+                video.playing = playing
+            end
+        end)
+    end
+    do
+        local node = ui:button({
+            position = { 0, 4, 0, 196 },
+            size = { 1, -8, 0, 42 },
+            text = 'Video: sound / seek 0',
+            textScaled = true,
+            maxTextSize = 16,
+            backgroundColor = { 0.1, 0.25, 0.35 },
+        }, controls)
+        node:connect('press', function()
+            self.tvVideo.volume = self.tvVideo.volume > 0 and 0 or 0.6
+            for _, video in ipairs(self.videos) do
+                video.time = 0
+            end
         end)
     end
     do

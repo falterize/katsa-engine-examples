@@ -137,6 +137,32 @@ function Demo.new(scene)
         maxDistance = 400,
         onTop = false,
     })
+    -- Video: a TV (SurfaceUI) and a floating panel (BillboardUI) play the same clip; the interface
+    -- script fills them with VideoFrame nodes.
+    local tv = Mesh.create(world, {
+        name = 'VideoTv',
+        position = { -105, 25, 100 },
+        rotation = { 0, 15, 0 },
+        size = { 64, 36, 6 },
+        color = { 0.04, 0.05, 0.07, 1 },
+    })
+    self.videoScreen = world:create('SurfaceUI', {
+        name = 'VideoScreen',
+        face = 'Front',
+        canvasSize = { 0, 640, 0, 360 },
+        maxDistance = 700,
+    }, tv)
+    local tvSocket =
+        world:create('Attachment3D', { name = 'VideoSocket', position = { 0, 30, 0 } }, tv)
+    self.videoBillboard = world:create('BillboardUI', {
+        name = 'VideoBillboard',
+        adornee = tvSocket,
+        sizeMode = 'Screen',
+        size = { 0, 240, 0, 135 },
+        canvasSize = { 0, 480, 0, 270 },
+        maxDistance = 500,
+        onTop = false,
+    })
     world:setInteractionSource(scene.camera) -- Explicit spectator interaction origin.
     local clickTarget = Mesh.create(world, {
         name = 'ClickTarget',
@@ -171,6 +197,7 @@ function Demo:update(dt)
     self.status.text = 'Panel presses: '
         .. self.clicks
         .. ' | Orange cube: 3D tap / support offsets / tilted UI / Texture + Tiles'
+        .. (self.tvVideo and (' | Video %.1f / %.1f s'):format(self.tvVideo.time, self.tvVideo.duration) or '')
 end
 
 return Demo
