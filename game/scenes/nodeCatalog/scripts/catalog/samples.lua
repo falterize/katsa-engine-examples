@@ -18,7 +18,7 @@ local routes = {
     BillboardUI = 'surfaceGallery',
     SurfaceUI = 'surfaceGallery',
     Decal3D = 'surfaceGallery',
-    ClickDetector3D = 'surfaceGallery',
+    Button3D = 'surfaceGallery',
     Mesh3D = 'nodes',
     Attachment3D = 'nodes',
     Camera3D = 'nightPlayer',
@@ -71,7 +71,7 @@ local descriptions = {
     Body3D = 'Switch body mode, friction, restitution or isTrigger. Use the Physics controls.',
     Collider3D = 'Resize/change its shape in Workspace; watch the body and enable collider debug.',
     Camera3D = 'Switch first/third person. Drag to look; tune follow and layer-group properties.',
-    ClickDetector3D = 'Close Workspace and tap the orange cube; camera dragging cancels a click.',
+    Button3D = 'Close Workspace and tap the orange cube; camera dragging cancels a click.',
     DirectionalLight3D = 'Use Rotation; multiple sources share maxActiveLights. Priority selects '
         .. 'directional winners.',
     Node = 'Emit a sample event; rename/reparent and inspect its lifecycle in Workspace.',

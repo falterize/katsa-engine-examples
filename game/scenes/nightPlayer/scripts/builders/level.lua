@@ -140,7 +140,7 @@ function NightPlayer.build(self, scene)
         lightInfluence = 0,
     })
     local detector = scene.world:create(
-        'ClickDetector3D',
+        'Button3D',
         { name = 'ToggleFlashlight', radius = 140 },
         self.interactCube
     )
